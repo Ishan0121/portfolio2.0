@@ -15,7 +15,7 @@ export default function SkillsPage() {
         <div className="relative mb-10 h-[200px] lg:h-[400px]  w-[200px] lg:w-[400px] mx-auto">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-violet-600 rounded-lg opacity-20 blur-3xl" />
           <Image
-            src="/images/skills.gif"
+            src="images/skills.gif"
             alt="skills"
             fill
             className="object-cover rounded-lg absolute"
@@ -30,7 +30,7 @@ export default function SkillsPage() {
         <div className="relative mt-10 h-[130px] lg:h-[300px]  w-[300px] lg:w-[700px] mx-auto">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-violet-600 rounded-lg opacity-20 blur-3xl" />
           <Image
-            src="/images/js.gif"
+            src="images/js.gif"
             alt="js"
             fill
             className="object-cover rounded-lg"
