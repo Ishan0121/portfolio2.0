@@ -53,7 +53,6 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                classname="w-fit"
               >
                 <Button asChild size="lg">
                   <Link href="/contact">
