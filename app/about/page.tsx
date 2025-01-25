@@ -30,7 +30,7 @@ export default function AboutPage() {
           <div className="relative h-[400px] lg:h-[600px]">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-violet-600 rounded-lg opacity-20 blur-3xl" />
             <Image
-              src="/images/table.gif"
+              src="./images/table.gif"
               alt="About Me"
               fill
               className="object-cover rounded-lg"
