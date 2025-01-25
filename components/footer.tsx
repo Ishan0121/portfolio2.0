@@ -51,7 +51,7 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Connect</h3>
             <div className="flex space-x-4 justify-center">
               <Link
-                href="https://github.com"
+                href="https://github.com/Ishan0121"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -59,7 +59,7 @@ export function Footer() {
                 <Github className="h-5 w-5" />
               </Link>
               <Link
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/ishan-maiti-785212297"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -67,7 +67,7 @@ export function Footer() {
                 <Linkedin className="h-5 w-5" />
               </Link>
               <Link
-                href="https://twitter.com"
+                href="https://x.com/maiti_ishan?t=a868cSCGJgGbHEAf5TKhXg&s=09"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
