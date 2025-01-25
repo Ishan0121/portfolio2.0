@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Moon, Menu, X, SunDimIcon } from "lucide-react";
@@ -28,62 +29,26 @@ export function Navigation() {
   ];
 
   return (
-    <nav className="fixed top-0 z-50 w-full box-border mx-10 px-10 border-b backdrop-blur-sm">
-      <div className="flex h-16 items-center justify-between">
-        <Link href="/" className="text-xl font-bold">
-          Portfolio
-        </Link>
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="fixed top-0 z-50 w-full box-border mx-10 px-10 border-b backdrop-blur-sm"
+    >
+      {/* <nav className="fixed top-0 z-50 w-full box-border mx-10 px-10 border-b backdrop-blur-sm"> */}
+        <div className="flex h-16 items-center justify-between">
+          <Link href="/" className="text-xl font-bold">
+            Portfolio
+          </Link>
 
-        <div className="hidden md:flex items-center">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={` hover:opacity-80 transition-colors px-4 py-1 rounded-2xl ${
-                pathname === link.href ? "glass" : ""
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {theme === "dark" ? (
-              <SunDimIcon className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
-          </Button>
-        </div>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? (
-            <X className="h-5 w-5" />
-          ) : (
-            <Menu className="h-5 w-5" />
-          )}
-        </Button>
-      </div>
-
-      {isMenuOpen && (
-        <div className="md:hidden border-t">
-          <div className="py-4 flex flex-col gap-4">
+          <div className="hidden md:flex items-center">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`hover:text-primary transition-colors px-4 py-1 rounded-2xl ${
+                className={` hover:opacity-80 transition-colors px-4 py-1 rounded-2xl ${
                   pathname === link.href ? "glass" : ""
                 }`}
-                onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}
               </Link>
@@ -100,8 +65,51 @@ export function Navigation() {
               )}
             </Button>
           </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
         </div>
-      )}
-    </nav>
+
+        {isMenuOpen && (
+          <div className="md:hidden border-t">
+            <div className="py-4 flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`hover:text-primary transition-colors px-4 py-1 rounded-2xl ${
+                    pathname === link.href ? "glass" : ""
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              >
+                {theme === "dark" ? (
+                  <SunDimIcon className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
+      {/* </nav> */}
+    </motion.nav>
   );
 }

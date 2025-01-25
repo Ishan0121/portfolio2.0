@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Download, CheckCircle, Ghost } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 
 type DownloadAnimationButtonProps = {
@@ -26,41 +27,43 @@ export default function DownloadAnimationButton({
     setIsDownloading(true);
 
     setTimeout(() => {
-    // Trigger the file download after the specified delay
-    const link = document.createElement("a");
-    link.href = filePath;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      // Trigger the file download after the specified delay
+      const link = document.createElement("a");
+      link.href = filePath;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-    // Mark as complete
+      // Mark as complete
       setIsDownloading(false);
       setDownloadDone(true);
     }, delay);
   };
 
   return (
-    <Button
-      size="lg"
-      variant="ghost"
-      onClick={handleDownload}
-      className={buttonClassName}
-      // disabled={isDownloading || downloadDone} // Disable while downloading or completed
-    >
-      {downloadDone ? (
-        <>
-          Download Started
-          <CheckCircle
-            className={`animate-pulse text-green-500 ${iconClassName}`}
-          />
-        </>
-      ) : (
-        <>
-          {isDownloading ? "Downloading..." : "Download Resume"}
-          <Download className={`${iconClassName}`} />
-        </>
-      )}
-    </Button>
+    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+      <Button
+        size="lg"
+        variant="ghost"
+        onClick={handleDownload}
+        className={buttonClassName}
+        // disabled={isDownloading || downloadDone} // Disable while downloading or completed
+      >
+        {downloadDone ? (
+          <>
+            Download Started
+            <CheckCircle
+              className={`animate-pulse text-green-500 ${iconClassName}`}
+            />
+          </>
+        ) : (
+          <>
+            {isDownloading ? "Downloading..." : "Download Resume"}
+            <Download className={`${iconClassName}`} />
+          </>
+        )}
+      </Button>
+    </motion.div>
   );
 }

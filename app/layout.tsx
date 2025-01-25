@@ -30,9 +30,9 @@ export default function RootLayout({
             {/* <AnimatedGrid /> */}
             <OnlyGrid />
             <main className="flex-1 px-10 container select-none">
-              {/* {children}  */}
+              {children} 
               {/* in the code below its makes a client side code is written on pageWrapper.tsx to allow an animation to work  */}
-              <PageWrapper>{children}</PageWrapper>
+              {/* <PageWrapper>{children}</PageWrapper> */}
             </main>
             <Footer />
           </div>

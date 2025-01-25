@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github } from "lucide-react";
+import { motion } from "framer-motion";
+import { itemVariants } from "@/lib/utils";
 
 type ProjectCardProps = {
   title: string;
@@ -20,7 +22,10 @@ export function ProjectCard({
   tags,
 }: ProjectCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded-lg border p-2 glass glass-hover">
+    <motion.div
+      variants={itemVariants}
+      className="group relative overflow-hidden rounded-lg border p-2 glass glass-hover"
+    >
       <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
         <Image
           src={imageUrl}
@@ -57,6 +62,6 @@ export function ProjectCard({
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
