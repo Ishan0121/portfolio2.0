@@ -58,7 +58,7 @@ export default function Home() {
           <div className="relative h-[300px] lg:h-[600px]  w-[300px] lg:w-[600px]">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-violet-600 rounded-lg opacity-40 blur-3xl" />
             <Image
-              src="/images/about.png"
+              src="https://github.com/Ishan0121/portfolio2.0/blob/4a086a73be72d84fbb8a5d2086d6c67da6c5ef9b/public/images/about.png"
               alt="Profile"
               fill
               className="object-cover rounded-lg"
