@@ -46,7 +46,7 @@ export default function Home() {
                 </Link>
               </Button>
               <DownloadAnimationButton
-                filePath="/docs/demo.pdf" // Custom file path
+                filePath="./docs/demo.pdf" // Custom file path
                 fileName="My Resume.pdf" // Custom file name
                 delay={1500} // Custom delay of 1.5 seconds
                 buttonClassName="glass" // Custom button styling
