@@ -79,7 +79,7 @@ To run this project locally, follow these steps:
 ---
 
 ## Live Demo 🌐
-You can view the live version of this portfolio [here](#).
+You can view the live version of this portfolio [here](https://ishan0121.github.io/portfolio2.0/).
 
 ---
 
