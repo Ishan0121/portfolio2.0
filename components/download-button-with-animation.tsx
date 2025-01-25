@@ -52,7 +52,7 @@ export default function DownloadAnimationButton({
         <>
           Download Started
           <CheckCircle
-            className={`animate-bounce text-green-500 ${iconClassName}`}
+            className={`animate-pulse text-green-500 ${iconClassName}`}
           />
         </>
       ) : (
