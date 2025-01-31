@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Moon, Menu, X, SunDimIcon } from "lucide-react";
+import { Moon, Menu, X, SunDimIcon, CpuIcon, CodeIcon } from "lucide-react";
 
 export function Navigation() {
   const [mounted, setMounted] = useState(false);
@@ -38,7 +38,7 @@ export function Navigation() {
       {/* <nav className="fixed top-0 z-50 w-full box-border mx-10 px-10 border-b backdrop-blur-sm"> */}
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="text-xl font-bold">
-            Portfolio
+            <code>&lt;Portfolio/&gt;</code>
           </Link>
 
           <div className="hidden md:flex items-center">
