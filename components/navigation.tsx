@@ -59,9 +59,9 @@ export function Navigation() {
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
               {theme === "dark" ? (
-                <SunDimIcon className="h-5 w-5" />
+                <SunDimIcon className="h-5 w-5 glass-hover" />
               ) : (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5 glass-hover" />
               )}
             </Button>
           </div>
@@ -101,9 +101,9 @@ export function Navigation() {
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
                 {theme === "dark" ? (
-                  <SunDimIcon className="h-5 w-5" />
+                  <SunDimIcon className="h-5 w-5 glass-hover" />
                 ) : (
-                  <Moon className="h-5 w-5" />
+                  <Moon className="h-5 w-5 glass-hover" />
                 )}
               </Button>
             </div>
