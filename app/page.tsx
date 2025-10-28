@@ -62,7 +62,7 @@ export default function Home() {
                 </Button>
               </motion.div>
               <DownloadAnimationButton
-                filePath="./docs/demo.pdf"
+                filePath="./docs/ISHAN MAITI_CV2.pdf"
                 fileName="My Resume.pdf"
                 delay={1500}
                 buttonClassName="glass"
