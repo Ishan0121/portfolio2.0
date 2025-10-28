@@ -31,7 +31,7 @@ export function Footer() {
                 href="/portfolio"
                 className="block hover:text-primary transition-colors"
               >
-                Portfolio
+                Projects
               </Link>
               <Link
                 href="/skills"
