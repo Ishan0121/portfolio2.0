@@ -4,10 +4,12 @@ import { SectionHeading } from "@/components/section-heading";
 import { TimelineItem } from "@/components/timeline-item";
 import { motion } from "framer-motion";
 import { fadeInVariant, staggerContainer } from "@/lib/utils";
+import FloatingSplineBot from "@/components/FloatingSplineBot";
 
 export default function AboutPage() {
   return (
     <>
+      <FloatingSplineBot splineScene="./spline/genkub.splinecode"/>
       <div className="h-16" />
       <section className="py-12 sm:py-16 relative">
         <motion.div

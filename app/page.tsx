@@ -1,6 +1,6 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { projects } from "@/lib/projects-data";
@@ -8,6 +8,7 @@ import { Typewriter } from "@/components/type-writer";
 import DownloadAnimationButton from "@/components/download-button-with-animation";
 import { motion } from "framer-motion";
 import { cardVariant, fadeInVariant, staggerContainer } from "@/lib/utils";
+import FloatingSplineBot from "@/components/FloatingSplineBot";
 
 export default function Home() {
   const messages = [
@@ -20,6 +21,9 @@ export default function Home() {
 
   return (
     <>
+      <FloatingSplineBot
+        splineScene="./spline/genkub.splinecode"
+      />
       <div className="h-16" /> {/* Spacer for fixed navbar */}
       <motion.section
         className="container py-12 sm:py-16 relative lg:min-h-screen"
@@ -72,7 +76,7 @@ export default function Home() {
           </motion.div>
           {/* Animated Profile Image */}
           <motion.div
-            className="relative h-[300px] lg:h-[600px]  w-[300px] lg:w-[600px]"
+            className="relative h-[300px] lg:h-[600px] w-[300px] lg:w-[600px]"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}

@@ -51,6 +51,7 @@ import {
   mergeProjects,
   Project,
 } from "@/lib/github-projects-fetcher";
+import FloatingSplineBot from "@/components/FloatingSplineBot";
 
 const GITHUB_USERNAME = "Ishan0121";
 
@@ -99,6 +100,7 @@ export default function PortfolioPage() {
 
   return (
     <>
+      <FloatingSplineBot splineScene="./spline/genkub.splinecode"/>
       <div className="h-16" />
       <motion.section
         initial="hidden"

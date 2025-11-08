@@ -6,11 +6,13 @@ import { SkillsSection } from "@/components/skills-section";
 import { skillsData } from "@/lib/skills-data";
 import Image from "next/image";
 import { containerVariants, fadeInUpVariants } from "@/lib/utils";
+import FloatingSplineBot from "@/components/FloatingSplineBot";
 
 export default function SkillsPage() {
 
   return (
     <>
+      <FloatingSplineBot splineScene="./spline/genkub.splinecode"/>
       <div className="h-10" />
       <motion.section
         className="container py-12 sm:py-16 flex flex-col items-center"

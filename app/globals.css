@@ -79,12 +79,27 @@
   body {
     @apply bg-background text-foreground;
   }
-  .glass{
-     @apply border bg-blue-900 bg-opacity-5 backdrop-blur-[1px] transition-colors shadow-sm shadow-blue-900;
+  .glass {
+    @apply relative border border-white/10
+          bg-blue-900/10 backdrop-blur-md
+          transition-all duration-300 ease-in-out
+          shadow-md shadow-blue-900/20 
+          rounded-xl;
   }
-  .glass-hover{
-     @apply hover:backdrop-blur-[3px] hover:bg-opacity-20;
-  } 
+
+  .glass::before {
+    content: "";
+    @apply absolute inset-0 rounded-xl
+          bg-gradient-to-tr from-white/10 to-transparent
+          opacity-50 pointer-events-none;
+  }
+
+  .glass-hover {
+    @apply hover:bg-blue-900/20 hover:backdrop-blur-lg
+          hover:border-white/20 hover:shadow-lg 
+          hover:shadow-blue-900/30 hover:scale-[1.01];
+  }
+
 }
 
 /* width */

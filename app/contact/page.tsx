@@ -5,12 +5,14 @@ import { SectionHeading } from "@/components/section-heading";
 import { ContactForm } from "@/components/contact-form";
 import { SocialLinks } from "@/components/social-links";
 import { childVariants, containerVariants } from "@/lib/utils";
+import FloatingSplineBot from "@/components/FloatingSplineBot";
 
 export default function ContactPage() {
 
 
   return (
     <>
+      <FloatingSplineBot splineScene="./spline/genkub.splinecode"/>
       <div className="h-16" />
       <motion.section
         className="container py-12 sm:py-12"
