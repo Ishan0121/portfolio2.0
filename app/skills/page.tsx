@@ -12,7 +12,7 @@ export default function SkillsPage() {
 
   return (
     <>
-      <FloatingSplineBot splineScene="./spline/genkub.splinecode"/>
+      {/* <FloatingSplineBot splineScene="./spline/genkub.splinecode"/> */}
       <div className="h-10" />
       <motion.section
         className="container py-12 sm:py-16 flex flex-col items-center"

@@ -19,16 +19,12 @@ import {
   Bot,
   X,
   EyeOff,
-  HammerIcon,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 
-// Dynamically import Spline with no SSR
+// Dynamically import Spline with no SSR - use the exact pattern from the original file
 const Spline = dynamic(
-  () =>
-    import("@splinetool/react-spline").then((mod) => ({
-      default: mod.default || mod,
-    })),
+  () => import("@splinetool/react-spline").then((mod) => mod.default),
   {
     ssr: false,
     loading: () => (
@@ -67,7 +63,7 @@ interface Shortcut {
 }
 
 const DRAG_THRESHOLD = 5;
-const HOVER_DELAY = 1000;
+const HOVER_DELAY = 500;
 const SPLINE_RELOAD_DELAY = 150;
 const ANIMATION_DURATION = 600;
 const MENU_WIDTH = 240;
@@ -138,19 +134,18 @@ export default function InteractiveSplineBot({
     () => [
       { icon: Home, label: "Home", href: "/" },
       { icon: User, label: "About", href: "/about" },
-      { icon: Briefcase, label: "Projects", href: "/portfolio" },
-      { icon: HammerIcon, label: "Skills", href: "/skills" },
+      { icon: Briefcase, label: "Portfolio", href: "/portfolio" },
       { icon: Mail, label: "Contact", href: "/contact" },
       {
         icon: Github,
         label: "GitHub",
-        href: "https://github.com/Ishan0121",
+        href: "https://github.com/yourusername",
         external: true,
       },
       {
         icon: Linkedin,
         label: "LinkedIn",
-        href: "https://linkedin.com/in/Ishan0121",
+        href: "https://linkedin.com/in/yourusername",
         external: true,
       },
     ],

@@ -100,7 +100,7 @@ export default function PortfolioPage() {
 
   return (
     <>
-      <FloatingSplineBot splineScene="./spline/genkub.splinecode"/>
+      {/* <FloatingSplineBot splineScene="./spline/genkub.splinecode"/> */}
       <div className="h-16" />
       <motion.section
         initial="hidden"

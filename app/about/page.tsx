@@ -9,7 +9,7 @@ import FloatingSplineBot from "@/components/FloatingSplineBot";
 export default function AboutPage() {
   return (
     <>
-      <FloatingSplineBot splineScene="./spline/genkub.splinecode"/>
+      {/* <FloatingSplineBot splineScene="./spline/genkub.splinecode"/> */}
       <div className="h-16" />
       <section className="py-12 sm:py-16 relative">
         <motion.div

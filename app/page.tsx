@@ -21,9 +21,7 @@ export default function Home() {
 
   return (
     <>
-      <FloatingSplineBot
-        splineScene="./spline/genkub.splinecode"
-      />
+      {/* <FloatingSplineBot splineScene="./spline/genkub.splinecode"/> */}
       <div className="h-16" /> {/* Spacer for fixed navbar */}
       <motion.section
         className="container py-12 sm:py-16 relative lg:min-h-screen"
