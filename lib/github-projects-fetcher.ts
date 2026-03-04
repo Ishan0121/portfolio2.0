@@ -65,7 +65,10 @@ const DEFAULT_PREVIEW_PATHS = [
 
 async function checkImageExists(url: string): Promise<boolean> {
   try {
-    const response = await fetch(url, { method: "HEAD" });
+    const response = await fetch(url, { 
+      method: "HEAD",
+      next: { revalidate: 3600 }
+    });
     const contentType = response.headers.get("content-type");
     return response.ok && (contentType?.startsWith("image/") ?? false);
   } catch {
@@ -136,7 +139,7 @@ export async function fetchGitHubRepos(
   const {
     username,
     excludeRepos = [],
-    maxProjects = 20,
+    maxProjects = 100,
     sortBy = "updated",
     includeForked = false,
     includeArchived = false,
@@ -151,6 +154,7 @@ export async function fetchGitHubRepos(
         headers: {
           Accept: "application/vnd.github.v3+json",
         },
+        next: { revalidate: 3600 }
       }
     );
 
