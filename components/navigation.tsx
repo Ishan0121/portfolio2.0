@@ -10,7 +10,7 @@ import { Moon, Menu, X, SunDimIcon, CpuIcon, CodeIcon } from "lucide-react";
 
 export function Navigation() {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, systemTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -56,12 +56,19 @@ export function Navigation() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              suppressHydrationWarning
+              onClick={() => {
+                if (theme === "system") setTheme("dark");
+                else if (theme === "dark") setTheme("light");
+                else setTheme("system");
+              }}
             >
-              {theme === "dark" ? (
-                <SunDimIcon className="h-5 w-5" />
-              ) : (
+              {theme === "system" ? (
+                <CpuIcon className="h-5 w-5" />
+              ) : theme === "dark" || (theme === "system" && systemTheme === "dark") ? (
                 <Moon className="h-5 w-5" />
+              ) : (
+                <SunDimIcon className="h-5 w-5" />
               )}
             </Button>
           </div>
@@ -98,12 +105,19 @@ export function Navigation() {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                suppressHydrationWarning
+                onClick={() => {
+                  if (theme === "system") setTheme("dark");
+                  else if (theme === "dark") setTheme("light");
+                  else setTheme("system");
+                }}
               >
-                {theme === "dark" ? (
-                  <SunDimIcon className="h-5 w-5" />
-                ) : (
+                {theme === "system" ? (
+                  <CpuIcon className="h-5 w-5" />
+                ) : theme === "dark" || (theme === "system" && systemTheme === "dark") ? (
                   <Moon className="h-5 w-5" />
+                ) : (
+                  <SunDimIcon className="h-5 w-5" />
                 )}
               </Button>
             </div>
