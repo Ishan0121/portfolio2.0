@@ -13,6 +13,7 @@ export const siteConfig = {
   resumePath: "./docs/ISHAN MAITI_CV2.pdf",
   resumeName: "My Resume.pdf",
   githubUsername: "Ishan0121",
+  web3formsAccessKey: "fa4b6e56-a0ca-4c81-a46a-9f1a4311dd3d", // Get your free access key from https://web3forms.com/
   socials: {
     github: "https://github.com/Ishan0121",
     linkedin: "https://www.linkedin.com/in/ishan-maiti-785212297",

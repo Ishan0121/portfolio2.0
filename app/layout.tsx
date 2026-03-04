@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
+import { Toaster } from '@/components/ui/sonner';
 // import { AnimatedGrid } from '@/components/animated-grid';
 import { OnlyGrid } from '@/components/only-grid';
 import { getRandomFavicon } from '@/lib/utils';
@@ -36,6 +37,7 @@ export default function RootLayout({
               {/* <PageWrapper>{children}</PageWrapper> */}
             </main>
             <Footer />
+            <Toaster />
           </div>
         </ThemeProvider>
       </body>
