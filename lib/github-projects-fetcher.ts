@@ -7,6 +7,7 @@ export interface Project {
   liveUrl: string;
   githubUrl: string;
   tags: string[];
+  isLoading?: boolean;
 }
 
 export interface GitHubFetcherConfig {
@@ -46,20 +47,20 @@ const DEFAULT_LANGUAGE_IMAGES: Record<string, string> = {
 
 const DEFAULT_PREVIEW_PATHS = [
   "preview.png",
-  "preview.jpg",
-  "preview.jpeg",
-  "preview/preview.png",
-  "preview/preview.jpg",
-  "preview/preview.jpeg",
   "assets/preview.png",
-  "assets/websiteScreenshot.png",
-  "assets/preview.jpg",
-  "public/preview.png",
-  "public/preview.jpg",
-  "thumbnail.png",
-  "thumbnail.jpg",
-  "screenshot.png",
-  "screenshot.jpg",
+  "public/images/preview.png",
+  // "preview.jpg",
+  // "preview.jpeg",
+  // "preview/preview.png",
+  // "preview/preview.jpg",
+  // "preview/preview.jpeg",
+  // "assets/websiteScreenshot.png",
+  // "assets/preview.jpg",
+  // "public/preview.jpg",
+  // "thumbnail.png",
+  // "thumbnail.jpg",
+  // "screenshot.png",
+  // "screenshot.jpg",
 ];
 
 async function checkImageExists(url: string): Promise<boolean> {
@@ -72,54 +73,18 @@ async function checkImageExists(url: string): Promise<boolean> {
   }
 }
 
-async function fetchRepoLanguages(
-  username: string,
-  repoName: string
-): Promise<Record<string, number>> {
-  try {
-    const response = await fetch(
-      `https://api.github.com/repos/${username}/${repoName}/languages`,
-      {
-        headers: {
-          Accept: "application/vnd.github.v3+json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      return {};
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(`Error fetching languages for ${repoName}:`, error);
-    return {};
-  }
-}
-
-function getMostUsedLanguage(languages: Record<string, number>): string | null {
-  if (Object.keys(languages).length === 0) return null;
-
-  return Object.entries(languages).reduce((prev, current) =>
-    current[1] > prev[1] ? current : prev
-  )[0];
-}
-
 async function fetchRepoPreviewImage(
   username: string,
   repoName: string,
   branch: string = "main",
   previewPaths: string[]
 ): Promise<string | null> {
-  const branches = [branch, "master", "gh-pages"];
-
-  for (const branchName of branches) {
-    for (const path of previewPaths) {
-      const url = `https://raw.githubusercontent.com/${username}/${repoName}/${branchName}/${path}`;
-      const exists = await checkImageExists(url);
-      if (exists) {
-        return url;
-      }
+  // Only check the default branch as suggested to improve performance
+  for (const path of previewPaths) {
+    const url = `https://raw.githubusercontent.com/${username}/${repoName}/${branch}/${path}`;
+    const exists = await checkImageExists(url);
+    if (exists) {
+      return url;
     }
   }
 
@@ -142,7 +107,7 @@ function formatRepoTitle(
 
 function getImageUrl(
   repoName: string,
-  languages: Record<string, number>,
+  primaryLanguage: string | null,
   previewImage: string | null,
   customImages?: Record<string, string>
 ): string {
@@ -156,19 +121,18 @@ function getImageUrl(
     return previewImage;
   }
 
-  // Priority 3: Language-based image (use most used language)
-  const mostUsedLanguage = getMostUsedLanguage(languages);
-  if (mostUsedLanguage && DEFAULT_LANGUAGE_IMAGES[mostUsedLanguage]) {
-    return DEFAULT_LANGUAGE_IMAGES[mostUsedLanguage];
+  // Priority 3: Language-based image
+  if (primaryLanguage && DEFAULT_LANGUAGE_IMAGES[primaryLanguage]) {
+    return DEFAULT_LANGUAGE_IMAGES[primaryLanguage];
   }
 
   // Priority 4: Default image
   return DEFAULT_LANGUAGE_IMAGES.default;
 }
 
-export async function fetchGitHubProjects(
+export async function fetchGitHubRepos(
   config: GitHubFetcherConfig
-): Promise<Project[]> {
+): Promise<{ repo: any; project: Project }[]> {
   const {
     username,
     excludeRepos = [],
@@ -177,9 +141,7 @@ export async function fetchGitHubProjects(
     includeForked = false,
     includeArchived = false,
     customTitles = {},
-    customImages = {},
     customDescriptions = {},
-    previewImagePaths = DEFAULT_PREVIEW_PATHS,
   } = config;
 
   try {
@@ -210,65 +172,94 @@ export async function fetchGitHubProjects(
     // Limit the number of repos to process
     const reposToProcess = filteredRepos.slice(0, maxProjects);
 
-    // Process repos with preview images and all languages
-    const projectsPromises = reposToProcess.map(async (repo: any) => {
+    // Return basic project info suitable for immediate display
+    return reposToProcess.map((repo: any) => {
       const repoName = repo.name;
-
-      // Fetch all languages used in the repo
-      const languages = await fetchRepoLanguages(username, repoName);
-
-      // Try to fetch preview image from repo
-      const previewImage = await fetchRepoPreviewImage(
-        username,
-        repoName,
-        repo.default_branch,
-        previewImagePaths
-      );
-
-      // Get final image URL with fallback logic (uses most used language)
-      const imageUrl = getImageUrl(
-        repoName,
-        languages,
-        previewImage,
-        customImages
-      );
-
-      // Build tags from all languages
-      const tags: string[] = [];
-      const languageNames = Object.keys(languages);
-      if (languageNames.length > 0) {
-        // Add languages sorted by usage (most used first)
-        const sortedLanguages = Object.entries(languages)
-          .sort((a, b) => b[1] - a[1])
-          .map(([lang]) => lang)
-          .slice(0, 5); // Limit to top 5 languages
-
-        tags.push(...sortedLanguages);
-      }
-
-      // Add topics if available
-      if (repo.topics && Array.isArray(repo.topics)) {
-        tags.push(...repo.topics.slice(0, 3)); // Limit topics to avoid too many tags
-      }
-
-      return {
+      const project: Project = {
         title: formatRepoTitle(repoName, customTitles),
         description:
           customDescriptions[repoName] ||
           repo.description ||
           "No description available",
-        imageUrl,
+        imageUrl: DEFAULT_LANGUAGE_IMAGES.default, // Default placeholder
         liveUrl: repo.homepage || `https://${username}.github.io/${repoName}`,
         githubUrl: repo.html_url,
-        tags,
+        tags: [],
+        isLoading: true,
       };
+      return { repo, project };
     });
-
-    return await Promise.all(projectsPromises);
   } catch (error) {
     console.error("Error fetching GitHub repos:", error);
     return [];
   }
+}
+
+export async function enrichProject(
+  basicProject: Project,
+  repo: any,
+  config: GitHubFetcherConfig
+): Promise<Project> {
+  const {
+    username,
+    customImages = {},
+    previewImagePaths = DEFAULT_PREVIEW_PATHS,
+  } = config;
+  const repoName = repo.name;
+
+  try {
+    // Avoid fetching languages separately to save API calls
+    // Use repo.language (primary language) and keywords instead
+
+    // Try to fetch preview image from repo
+    const previewImage = await fetchRepoPreviewImage(
+      username,
+      repoName,
+      repo.default_branch,
+      previewImagePaths
+    );
+
+    // Get final image URL with fallback logic (uses primary language)
+    const imageUrl = getImageUrl(
+      repoName,
+      repo.language, // Use the primary language from the repo object
+      previewImage,
+      customImages
+    );
+
+    // Build tags
+    const tags: string[] = [];
+    
+    // Add primary language if available
+    if (repo.language) {
+      tags.push(repo.language);
+    }
+
+    // Add topics if available
+    if (repo.topics && Array.isArray(repo.topics)) {
+      tags.push(...repo.topics.slice(0, 4)); // Limit topics
+    }
+
+    return {
+      ...basicProject,
+      imageUrl,
+      tags,
+      isLoading: false,
+    };
+  } catch (error) {
+    console.error(`Error enriching project ${repoName}:`, error);
+    return { ...basicProject, isLoading: false };
+  }
+}
+
+export async function fetchGitHubProjects(
+  config: GitHubFetcherConfig
+): Promise<Project[]> {
+  const basicData = await fetchGitHubRepos(config);
+  const enrichedProjectsPromise = basicData.map(({ repo, project }) =>
+    enrichProject(project, repo, config)
+  );
+  return await Promise.all(enrichedProjectsPromise);
 }
 
 // Helper function to merge manual and GitHub projects

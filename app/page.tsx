@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { projects } from "@/lib/projects-data";
+import { siteConfig } from "@/lib/config";
 import { Typewriter } from "@/components/type-writer";
 import DownloadAnimationButton from "@/components/download-button-with-animation";
 import { motion } from "framer-motion";
@@ -11,13 +12,7 @@ import { cardVariant, fadeInVariant, staggerContainer } from "@/lib/utils";
 import FloatingSplineBot from "@/components/FloatingSplineBot";
 
 export default function Home() {
-  const messages = [
-    "Welcome to my Portfolio!",
-    "I am a Developer.",
-    "I Love Coding.",
-    "Exploring Technologies.",
-    "A Programmer.",
-  ];
+  const messages = siteConfig.messages;
 
   return (
     <>
@@ -35,7 +30,7 @@ export default function Home() {
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-8 cursor-cell">
               Hi, I&apos;m{" "}
               <span className="bg-gradient-to-r from-primary to-blue-900 bg-clip-text text-transparent">
-                Ishan Maiti
+                {siteConfig.name}
               </span>
               <br />
               <span className="bg-gradient-to-r from-primary to-blue-900 bg-clip-text text-transparent text-2xl sm:text-4xl font-mono">
@@ -46,10 +41,8 @@ export default function Home() {
                 />
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
-              Passionate about crafting seamless digital experiences through
-              clean code and <br />
-              innovative solutions.
+            <p className="text-xl text-muted-foreground mb-8 whitespace-pre-line">
+              {siteConfig.bio}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <motion.div
@@ -64,8 +57,8 @@ export default function Home() {
                 </Button>
               </motion.div>
               <DownloadAnimationButton
-                filePath="./docs/ISHAN MAITI_CV2.pdf"
-                fileName="My Resume.pdf"
+                filePath={siteConfig.resumePath}
+                fileName={siteConfig.resumeName}
                 delay={1500}
                 buttonClassName="glass"
                 iconClassName="ml-2 h-5 w-5"

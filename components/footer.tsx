@@ -1,5 +1,6 @@
 import { Github, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
+import { siteConfig } from "@/lib/config";
 
 export function Footer() {
   return (
@@ -51,7 +52,7 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Connect</h3>
             <div className="flex space-x-4 justify-center">
               <Link
-                href="https://github.com/Ishan0121"
+                href={siteConfig.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -59,7 +60,7 @@ export function Footer() {
                 <Github className="h-5 w-5" />
               </Link>
               <Link
-                href="https://www.linkedin.com/in/ishan-maiti-785212297"
+                href={siteConfig.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -67,7 +68,7 @@ export function Footer() {
                 <Linkedin className="h-5 w-5" />
               </Link>
               <Link
-                href="https://x.com/maiti_ishan?t=a868cSCGJgGbHEAf5TKhXg&s=09"
+                href={siteConfig.socials.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"

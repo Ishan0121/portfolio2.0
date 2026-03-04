@@ -8,12 +8,13 @@ import { Footer } from '@/components/footer';
 import { OnlyGrid } from '@/components/only-grid';
 import { getRandomFavicon } from '@/lib/utils';
 import { PageWrapper } from './pageWrapper';
+import { siteConfig } from '@/lib/config';
 
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
-  title: 'Portfolio | Creative Developer',
+  title: siteConfig.title,
   icons: `/images/${getRandomFavicon()}`,
-  description: 'Personal portfolio showcasing my work and experience',
+  description: siteConfig.description,
 };
 
 export default function RootLayout({

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Github } from "lucide-react";
 import { motion } from "framer-motion";
 import { itemVariants } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type ProjectCardProps = {
   title: string;
@@ -11,6 +12,7 @@ type ProjectCardProps = {
   liveUrl: string;
   githubUrl: string;
   tags: string[];
+  isLoading?: boolean;
 };
 
 export function ProjectCard({
@@ -20,7 +22,30 @@ export function ProjectCard({
   liveUrl,
   githubUrl,
   tags,
+  isLoading,
 }: ProjectCardProps) {
+  if (isLoading) {
+    return (
+      <div className="rounded-lg border p-2 space-y-2">
+        <Skeleton className="h-[200px] w-full rounded-lg" />
+        <div className="p-4 space-y-4">
+          <Skeleton className="h-6 w-3/4" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-5/6" />
+          <div className="flex gap-2 pt-2">
+            <Skeleton className="h-6 w-16 rounded-full" />
+            <Skeleton className="h-6 w-16 rounded-full" />
+            <Skeleton className="h-6 w-16 rounded-full" />
+          </div>
+          <div className="flex gap-2 pt-2">
+            <Skeleton className="h-9 w-24" />
+            <Skeleton className="h-9 w-24" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <motion.div
       variants={itemVariants}

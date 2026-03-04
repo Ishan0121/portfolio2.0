@@ -45,23 +45,55 @@ import { ProjectCard } from "@/components/project-card";
 import { manualProjects } from "@/lib/manual-projects";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
-  fetchGitHubProjects,
+  fetchGitHubRepos,
+  enrichProject,
   mergeProjects,
   Project,
+  GitHubFetcherConfig,
 } from "@/lib/github-projects-fetcher";
-import FloatingSplineBot from "@/components/FloatingSplineBot";
+import { siteConfig } from "@/lib/config";
+// import FloatingSplineBot from "@/components/FloatingSplineBot";
 
-const GITHUB_USERNAME = "Ishan0121";
+const GITHUB_USERNAME = siteConfig.githubUsername;
 
 export default function PortfolioPage() {
   const [projects, setProjects] = useState<Project[]>(manualProjects);
   const [loading, setLoading] = useState(true);
+  const isMounted = useRef(true);
 
   useEffect(() => {
+    isMounted.current = true;
+    
+    // Cache key and expiry time (1 hour)
+    const CACHE_KEY = "portfolio_projects_cache";
+    const CACHE_EXPIRY = 45 * 60 * 1000;
+
     const loadProjects = async () => {
-      const githubProjects = await fetchGitHubProjects({
+      // 1. Check local storage for cached data
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const { timestamp, data } = JSON.parse(cached);
+          const isExpired = Date.now() - timestamp > CACHE_EXPIRY;
+          
+          if (!isExpired && Array.isArray(data) && data.length > 0) {
+            console.log("Using cached projects data");
+            const mergedCachedProjects = mergeProjects(manualProjects, data);
+            setProjects(mergedCachedProjects);
+            setLoading(false);
+            return; // Exit early if cache is valid
+          }
+        }
+      } catch (error) {
+        console.warn("Failed to read from local storage cache", error);
+        // Continue to fetch if cache fails
+      }
+
+      console.log("Fetching fresh projects data");
+      
+      const config: GitHubFetcherConfig = {
         username: GITHUB_USERNAME,
         excludeRepos: [
           GITHUB_USERNAME, // Profile README repo
@@ -88,14 +120,66 @@ export default function PortfolioPage() {
         customDescriptions: {
           // "repo-name": "Better description",
         },
-      });
+      };
 
-      const mergedProjects = mergeProjects(manualProjects, githubProjects);
-      setProjects(mergedProjects);
-      setLoading(false);
+      // 2. Initial fast fetch (basic info only)
+      const basicData = await fetchGitHubRepos(config);
+      
+      if (!isMounted.current) return;
+
+      const basicProjects = basicData.map((d) => d.project);
+      
+      // Merge with manual projects and update state immediately
+      const mergedBasicProjects = mergeProjects(manualProjects, basicProjects);
+      setProjects(mergedBasicProjects);
+      setLoading(false); // Stop showing loading indicator as we have content
+
+      // 3. Background enrichment (images, tags, languages)
+      const fullyEnrichedProjects: Project[] = [...basicProjects];
+      let hasUpdates = false;
+
+      // Process one by one or in small batches to update UI progressively
+      for (let i = 0; i < basicData.length; i++) {
+        if (!isMounted.current) break;
+        
+        const { repo, project } = basicData[i];
+        const enrichedProject = await enrichProject(project, repo, config);
+        
+        if (!isMounted.current) break;
+        
+        fullyEnrichedProjects[i] = enrichedProject;
+        hasUpdates = true;
+
+        // Update the specific project in the state
+        setProjects((prevProjects) => {
+          return prevProjects.map((p) => {
+            if (p.githubUrl === enrichedProject.githubUrl) {
+              return enrichedProject;
+            }
+            return p;
+          });
+        });
+      }
+
+      // 4. Cache the fully enriched data
+      if (hasUpdates && isMounted.current) {
+         try {
+           localStorage.setItem(CACHE_KEY, JSON.stringify({
+             timestamp: Date.now(),
+             data: fullyEnrichedProjects
+           }));
+           console.log("Projects data cached to local storage");
+         } catch (e) {
+           console.warn("Failed to cache projects data", e);
+         }
+      }
     };
 
     loadProjects();
+
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   return (
