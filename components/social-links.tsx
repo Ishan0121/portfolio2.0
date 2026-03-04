@@ -6,7 +6,11 @@ export function SocialLinks() {
   return (
     <div className="flex flex-col gap-4">
       <Button variant="outline" asChild className="w-full justify-start glass">
-        <a href={`mailto:${siteConfig.socials.email}`}>
+        <a 
+          href={`https://mail.google.com/mail/?view=cm&fs=1&to=${siteConfig.socials.email}`}
+          target="_blank" 
+          rel="noopener noreferrer"
+        >
           <Mail className="mr-2 h-4 w-4" />
           {siteConfig.socials.email}
         </a>
