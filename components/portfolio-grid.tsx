@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProjectCard } from "@/components/project-card";
+import { ProjectDrawer } from "@/components/project-drawer";
 import { Project } from "@/lib/github-projects-fetcher";
 import { containerVariants } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,8 @@ const ITEMS_PER_PAGE = 10;
 export function PortfolioGrid({ projects }: { projects: Project[] }) {
   const [activeTag, setActiveTag] = useState<string>("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Extract all tags and count occurrences
   const tagCounts = projects.flatMap(p => p.tags).reduce((acc, tag) => {
@@ -144,7 +147,10 @@ export function PortfolioGrid({ projects }: { projects: Project[] }) {
               transition={{ duration: 0.2 }}
               key={`${project.githubUrl || project.title}-${currentPage}-${index}`}
             >
-              <ProjectCard {...project} tags={[...project.tags]} />
+              <ProjectCard {...project} tags={[...project.tags]} onClick={() => {
+                setSelectedProject(project);
+                setIsDrawerOpen(true);
+              }} />
             </motion.div>
           ))}
         </AnimatePresence>
@@ -236,6 +242,13 @@ export function PortfolioGrid({ projects }: { projects: Project[] }) {
           </div>
         </motion.div>
       )}
+
+      {/* Project Detail Drawer */}
+      <ProjectDrawer 
+        project={selectedProject} 
+        open={isDrawerOpen} 
+        onOpenChange={setIsDrawerOpen} 
+      />
     </div>
   );
 }
