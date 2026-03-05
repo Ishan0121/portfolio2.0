@@ -78,6 +78,7 @@ export default function InteractiveSplineBot({
   onNavigate,
 }: InteractiveSplineBotProps) {
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
+  const [entryPosition, setEntryPosition] = useState<Position | null>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
@@ -291,15 +292,16 @@ export default function InteractiveSplineBot({
     endX = Math.max(boundaries.minX, Math.min(boundaries.maxX, endX));
     endY = Math.max(boundaries.minY, Math.min(boundaries.maxY, endY));
 
-    setPosition({ x: startX, y: startY });
+    // Store off-screen entry and final on-screen position in the same React batch.
+    // Framer Motion reads `initial` once on mount, so it will see entryPosition
+    // and spring-animate toward `animate` (the final position) automatically.
+    setEntryPosition({ x: startX, y: startY });
+    setPosition({ x: endX, y: endY });
+    setIsInitialLoad(false);
 
-    const timer = setTimeout(() => {
-      setPosition({ x: endX, y: endY });
-      setIsInitialLoad(false);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [windowSize.x, width, height]);
+    return undefined;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [windowSize.x, windowSize.y, width, height]);
 
   const moveToRandomPosition = useCallback(() => {
     if (showMenu || isDragging) return;
@@ -536,12 +538,10 @@ export default function InteractiveSplineBot({
           top: 0,
           cursor: isDragging ? "grabbing" : "grab",
         }}
-        initial={{
-          x: position.x,
-          y: position.y,
-          scale: 0,
-          opacity: 0,
-        }}
+        initial={entryPosition
+          ? { x: entryPosition.x, y: entryPosition.y, scale: 1, opacity: 0 }
+          : { scale: 0, opacity: 0 }
+        }
         animate={{
           x: position.x,
           y: position.y,
@@ -549,10 +549,10 @@ export default function InteractiveSplineBot({
           opacity: 1,
         }}
         transition={{
-          type: "spring",
-          stiffness: isInitialLoad ? 80 : 200,
-          damping: isInitialLoad ? 12 : 20,
-          mass: isInitialLoad ? 1.5 : 1,
+          x: { type: 'spring', stiffness: 70, damping: 14, mass: 1.5 },
+          y: { type: 'spring', stiffness: 70, damping: 14, mass: 1.5 },
+          scale: { type: 'spring', stiffness: 200, damping: 20 },
+          opacity: { duration: 0.3 },
         }}
         onMouseDown={!isHidden ? handleMouseDown : undefined}
         onClick={

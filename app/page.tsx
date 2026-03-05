@@ -10,6 +10,7 @@ import DownloadAnimationButton from "@/components/download-button-with-animation
 import { motion } from "framer-motion";
 import { cardVariant, fadeInVariant, staggerContainer } from "@/lib/utils";
 import FloatingSplineBot from "@/components/FloatingSplineBot";
+import { GithubStats } from "@/components/github-stats";
 
 export default function Home() {
   const messages = siteConfig.messages;
@@ -134,6 +135,9 @@ export default function Home() {
           </Button>
         </div>
       </motion.section>
+      
+      <hr className="border-blue-700 dark:border-blue-300/25 border-dotted" />
+      <GithubStats />
     </>
   );
 }

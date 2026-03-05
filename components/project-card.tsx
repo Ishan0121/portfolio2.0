@@ -11,6 +11,7 @@ type ProjectCardProps = {
   githubUrl: string;
   tags: string[];
   isLoading?: boolean;
+  onClick?: () => void;
 };
 
 export function ProjectCard({
@@ -21,6 +22,7 @@ export function ProjectCard({
   githubUrl,
   tags,
   isLoading,
+  onClick,
 }: ProjectCardProps) {
   if (isLoading) {
     return (
@@ -48,7 +50,16 @@ export function ProjectCard({
   const isAutoLiveUrl = liveUrl.includes(".github.io") && liveUrl.includes(title.toLowerCase().replace(/\s+/g, '-'));
 
   return (
-    <div className="group relative flex flex-col h-full overflow-hidden rounded-xl border p-2 glass glass-hover transition-all duration-300 dark:border-white/10 dark:hover:border-white/20">
+    <div 
+      className={`group relative flex flex-col h-full overflow-hidden rounded-xl border p-2 glass glass-hover transition-all duration-300 dark:border-white/10 dark:hover:border-white/20 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={(e) => {
+        // Only trigger if not clicking on the action buttons directly
+        if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('a')) {
+          return;
+        }
+        onClick?.();
+      }}
+    >
       <div className="relative h-[220px] w-full overflow-hidden rounded-lg">
         <Image
           src={imageUrl}
