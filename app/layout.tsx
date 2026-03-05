@@ -39,7 +39,7 @@ export default function RootLayout({
             </main>
             <Footer />
             <Toaster />
-            <SplineBotWrapper />
+            // <SplineBotWrapper />
           </div>
         </ThemeProvider>
       </body>
