@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import dynamic from "next/dynamic";
 
-// Dynamically import Spline with no SSR - use the exact pattern from the original file
+// Resolved via webpack alias in next.config.js (bypasses broken ESM exports map)
 const Spline = dynamic(
   () => import("@splinetool/react-spline").then((mod) => mod.default),
   {
