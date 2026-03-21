@@ -47,6 +47,7 @@
     "@types/react-dom": "18.2.7",
     "@xyflow/react": "^12.10.1",
     "autoprefixer": "10.4.15",
+    "bad-words": "^4.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -83,5 +84,8 @@
   },
   "overrides": {
     "minimatch": "^9.0.7"
+  },
+  "devDependencies": {
+    "@types/bad-words": "^3.0.3"
   }
 }
