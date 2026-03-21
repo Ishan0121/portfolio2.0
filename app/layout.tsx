@@ -13,6 +13,8 @@ import { siteConfig } from '@/lib/config';
 import { SplineBotWrapper } from '@/components/SplineBotWrapper';
 import { Terminal } from '@/components/terminal';
 import { NowPlaying } from '@/components/now-playing';
+import { AchievementsProvider } from '@/components/achievements-provider';
+import { LiveCursors } from '@/components/live-cursors';
 
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
@@ -30,21 +32,24 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex min-h-screen flex-col items-center">
-            <Navigation />
-            {/* <AnimatedGrid /> */}
-            <OnlyGrid />
-            <main className="flex-1 px-10 container select-none">
-              {children} 
-              {/* in the code below its makes a client side code is written on pageWrapper.tsx to allow an animation to work  */}
-              {/* <PageWrapper>{children}</PageWrapper> */}
-            </main>
-            <Footer />
-            <Toaster />
-            <Terminal />
-            <NowPlaying />
-            <SplineBotWrapper />
-          </div>
+          <AchievementsProvider>
+            <div className="flex min-h-screen flex-col items-center">
+              <Navigation />
+              {/* <AnimatedGrid /> */}
+              <OnlyGrid />
+              <main className="flex-1 px-10 container select-none">
+                {children} 
+                {/* in the code below its makes a client side code is written on pageWrapper.tsx to allow an animation to work  */}
+                {/* <PageWrapper>{children}</PageWrapper> */}
+              </main>
+              <Footer />
+              <Toaster />
+              <Terminal />
+              <NowPlaying />
+              <LiveCursors />
+              <SplineBotWrapper />
+            </div>
+          </AchievementsProvider>
         </ThemeProvider>
       </body>
     </html>

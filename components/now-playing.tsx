@@ -4,12 +4,14 @@ import { useEffect, useState, useRef } from "react";
 import { features } from "@/config/features";
 import { Music, Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { Button } from "./ui/button";
+import { useAchievements } from "@/components/achievements-provider";
 
 export function NowPlaying() {
   const [mounted, setMounted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { unlockAchievement } = useAchievements();
 
   useEffect(() => {
     setMounted(true);
@@ -34,7 +36,9 @@ export function NowPlaying() {
       audioRef.current.pause();
     } else {
       // Browsers restrict autoplay, so we start it on user interaction
-      audioRef.current.play().catch(e => {
+      audioRef.current.play().then(() => {
+        unlockAchievement("music_listener");
+      }).catch(e => {
         console.error("Audio playback failed. The file /audio/ambient.mp3 might be missing:", e);
       });
     }

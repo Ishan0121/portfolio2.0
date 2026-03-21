@@ -7,4 +7,7 @@ export const features = {
   nowPlaying: true,
   blog: true,
   pageTransitions: true,
+  commandPalette: true,
+  achievements: true,
+  livePresence: true,
 };

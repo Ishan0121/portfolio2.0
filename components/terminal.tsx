@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { features } from "@/config/features";
 import { useRouter } from "next/navigation";
+import { useAchievements } from "@/components/achievements-provider";
 
 export function Terminal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,7 @@ export function Terminal() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const outputEndRef = useRef<HTMLDivElement>(null);
+  const { unlockAchievement } = useAchievements();
 
   useEffect(() => {
     if (!features.terminal) return;
@@ -22,7 +24,10 @@ export function Terminal() {
       // Toggle on ` or Ctrl+J
       if (e.key === "`" || (e.ctrlKey && e.key === "j")) {
         e.preventDefault();
-        setIsOpen((prev) => !prev);
+        setIsOpen((prev) => {
+          if (!prev) unlockAchievement("terminal_user");
+          return !prev;
+        });
       }
     };
 

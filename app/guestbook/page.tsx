@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SectionHeading } from "@/components/section-heading";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Loader2, AlertTriangle } from "lucide-react";
+import { MessageSquare, Loader2, AlertTriangle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Filter } from "bad-words";
 import {
   collection,
   addDoc,
+  deleteDoc,
+  doc,
   onSnapshot,
   orderBy,
   query,
@@ -56,6 +58,7 @@ export default function GuestbookPage() {
   const [strike, setStrike] = useState(0);
   const [lockoutUntil, setLockoutUntil] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [myPosts, setMyPosts] = useState<string[]>([]);
 
   useEffect(() => {
     const s = localStorage.getItem("gb_strike");
@@ -69,6 +72,13 @@ export default function GuestbookPage() {
       } else {
         localStorage.removeItem("gb_lockout");
       }
+    }
+
+    const savedPosts = localStorage.getItem("gb_my_posts");
+    if (savedPosts) {
+      try {
+        setMyPosts(JSON.parse(savedPosts));
+      } catch (e) {}
     }
   }, []);
 
@@ -198,12 +208,17 @@ export default function GuestbookPage() {
 
     setIsSubmitting(true);
     try {
-      await addDoc(collection(db, "guestbook"), {
+      const docRef = await addDoc(collection(db, "guestbook"), {
         author: finalName,
-        avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(finalName)}`,
+        avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(finalName)}`,
         content: message.trim(),
         createdAt: serverTimestamp(),
       });
+      
+      const newMyPosts = [...myPosts, docRef.id];
+      setMyPosts(newMyPosts);
+      localStorage.setItem("gb_my_posts", JSON.stringify(newMyPosts));
+      
       localStorage.setItem("guestbook_last_post", Date.now().toString());
       toast.success("Message posted!");
       setName("");
@@ -218,6 +233,20 @@ export default function GuestbookPage() {
       toast.error(msg);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this message?")) return;
+    try {
+      await deleteDoc(doc(db, "guestbook", id));
+      const newMyPosts = myPosts.filter((postId) => postId !== id);
+      setMyPosts(newMyPosts);
+      localStorage.setItem("gb_my_posts", JSON.stringify(newMyPosts));
+      toast.success("Message deleted");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete message");
     }
   };
 
@@ -396,13 +425,24 @@ export default function GuestbookPage() {
                 className="w-10 h-10 rounded-full bg-white/5 border border-white/10 shrink-0 group-hover:scale-110 transition-transform duration-300"
               />
               <div className="flex flex-col flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-medium text-foreground/90 truncate">
-                    {entry.author}
-                  </span>
-                  <span className="text-xs text-muted-foreground shrink-0">
-                    • {formatDate(entry.createdAt)}
-                  </span>
+                <div className="flex items-center justify-between gap-2 mb-1 w-full">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-foreground/90 truncate">
+                      {entry.author}
+                    </span>
+                    <span className="text-xs text-muted-foreground shrink-0">
+                      • {formatDate(entry.createdAt)}
+                    </span>
+                  </div>
+                  {myPosts.includes(entry.id) && (
+                    <button
+                      onClick={() => handleDelete(entry.id)}
+                      className="p-1.5 text-red-500/50 hover:text-red-500 hover:bg-red-500/10 rounded-md transition-all shrink-0 opacity-0 group-hover:opacity-100 focus:opacity-100"
+                      title="Delete this message"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
                 <p className="text-sm text-muted-foreground/90 leading-relaxed break-words">
                   {entry.content}

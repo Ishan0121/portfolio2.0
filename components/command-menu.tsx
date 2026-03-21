@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 import { features } from "@/config/features";
+import { useAchievements } from "@/components/achievements-provider";
 
 interface CommandMenuProps {
   open: boolean;
@@ -36,13 +37,15 @@ interface CommandMenuProps {
 export function CommandMenu({ open, setOpen }: CommandMenuProps) {
   const router = useRouter();
   const { setTheme } = useTheme();
+  const { unlockAchievement } = useAchievements();
 
   // Handle global shortcut
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen(!open);
+        setOpen(true);
+        unlockAchievement("cmd_palette_user");
       }
     };
 
