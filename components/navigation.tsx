@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Moon, Menu, X, SunDimIcon, CpuIcon, CodeIcon, Search } from "lucide-react";
 import { CommandMenu } from "@/components/command-menu";
+import { features } from "@/config/features";
 
 export function Navigation() {
   const [mounted, setMounted] = useState(false);
@@ -22,11 +23,17 @@ export function Navigation() {
 
   if (!mounted) return null;
 
-  const navLinks = [
+  const baseNavLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/portfolio", label: "Projects" },
     { href: "/skills", label: "Skills" },
+  ];
+
+  const navLinks = [
+    ...baseNavLinks,
+    ...(features.blog ? [{ href: "/blog", label: "Blog" }] : []),
+    ...(features.guestbook ? [{ href: "/guestbook", label: "Guestbook" }] : []),
     { href: "/contact", label: "Contact" },
   ];
 

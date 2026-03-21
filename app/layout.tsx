@@ -10,7 +10,9 @@ import { OnlyGrid } from '@/components/only-grid';
 import { getRandomFavicon } from '@/lib/utils';
 import { PageWrapper } from './pageWrapper';
 import { siteConfig } from '@/lib/config';
-// import { SplineBotWrapper } from '@/components/SplineBotWrapper';
+import { SplineBotWrapper } from '@/components/SplineBotWrapper';
+import { Terminal } from '@/components/terminal';
+import { NowPlaying } from '@/components/now-playing';
 
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
@@ -39,7 +41,9 @@ export default function RootLayout({
             </main>
             <Footer />
             <Toaster />
-            {/* <SplineBotWrapper />*/}
+            <Terminal />
+            <NowPlaying />
+            <SplineBotWrapper />
           </div>
         </ThemeProvider>
       </body>

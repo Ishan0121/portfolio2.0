@@ -22,8 +22,11 @@ import {
   Code2,
   Mail,
   FileDown,
+  PenTool,
+  MessageSquare,
 } from "lucide-react";
 import { siteConfig } from "@/lib/config";
+import { features } from "@/config/features";
 
 interface CommandMenuProps {
   open: boolean;
@@ -95,6 +98,22 @@ export function CommandMenu({ open, setOpen }: CommandMenuProps) {
               <Code2 className="mr-2 h-4 w-4" />
               <span>Skills</span>
             </CommandItem>
+            {features.blog && (
+              <CommandItem
+                onSelect={() => runCommand(() => router.push("/blog"))}
+              >
+                <PenTool className="mr-2 h-4 w-4" />
+                <span>Blog</span>
+              </CommandItem>
+            )}
+            {features.guestbook && (
+              <CommandItem
+                onSelect={() => runCommand(() => router.push("/guestbook"))}
+              >
+                <MessageSquare className="mr-2 h-4 w-4" />
+                <span>Guestbook</span>
+              </CommandItem>
+            )}
             <CommandItem
               onSelect={() => runCommand(() => router.push("/contact"))}
             >

@@ -8,6 +8,8 @@ const FloatingSplineBot = dynamic(
   { ssr: false }
 );
 
+import { features } from "@/config/features";
+
 export function SplineBotWrapper() {
   const [size, setSize] = useState(200);
 
@@ -17,6 +19,8 @@ export function SplineBotWrapper() {
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
+
+  if (!features.splineBot) return null;
 
   return (
     <FloatingSplineBot
